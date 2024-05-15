@@ -15,3 +15,9 @@ run:
 
 lint:
 	poetry run flake8 gendiff
+
+publish:
+	poetry publish --dry-run
+
+pipx-install:
+	pipx install . --force
