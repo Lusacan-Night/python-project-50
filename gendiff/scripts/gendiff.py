@@ -1,28 +1,28 @@
 import argparse
 import json
 
+
 def generate_diff(filepath1, filepath2):
     f1 = json.load(open(filepath1))
     f2 = json.load(open(filepath2))
-    result = ""
-    missing = '-'
-    matching = ' '
-    differ = '+'
-    f1_keys = f1.keys()
-    f2_keys = f2.keys()
-    keys = set(f2_keys) - set(f1_keys)
-    print(keys)
-    for k, v in f1.items():
-        if not k in f2.keys():
-            result += f"{missing} {k}: {v}\n"
-        if k in f2.keys() and v == f2[k]:
-            result += f"{matching} {k}: {v}\n"
-        if k in f2.keys() and v != f2[k]:
-            result += f"{missing} {k}: {v}\n"
-            result += f"{differ} {k}: {f2[k]}\n"
-        
-    result += f"{differ} {keys}: {f2[keys.pop()]}"
-    return result
+    
+    result = []
+    f1_set = set(f1.items())
+    f2_set = set(f2.items())
+
+    same_keys = [('    ', k[0], str(k[1])) for k in list(f1_set.intersection(f2_set))]
+    different_keys = [('  - ', k[0], str(k[1])) for k in list(f1_set.difference(f2_set))]
+    new_keys = [('  + ', k[0], str(k[1])) for k in list(f2_set.difference(f1_set))]
+
+    result += same_keys + different_keys + new_keys
+    result = sorted(result, key=lambda k: k[1])
+    output = '{'
+    for items in result:
+        output += f'\n{items[0] + items[1]}: {items[2].lower()}'
+    
+    output += '\n}'
+    return output
+
 
 
 def main():
