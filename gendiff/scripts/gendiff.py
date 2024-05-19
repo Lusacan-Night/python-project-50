@@ -10,11 +10,11 @@ def generate_diff(filepath1, filepath2):
     f1_set = set(f1.items())
     f2_set = set(f2.items())
 
-    same_keys = [('    ', k[0], str(k[1])) for k in f1_set.intersection(f2_set)]
-    different_keys = [('  - ', k[0], str(k[1])) for k in f1_set.difference(f2_set)]
-    new_keys = [('  + ', k[0], str(k[1])) for k in f2_set.difference(f1_set)]
+    same_keys = [('    ', item[0], str(item[1])) for item in f1_set.intersection(f2_set)]
+    different_keys = [('  - ', item[0], str(item[1])) for item in f1_set.difference(f2_set)]
+    new_keys = [('  + ', item[0], str(item[1])) for item in f2_set.difference(f1_set)]
 
-    result = sorted(same_keys + different_keys + new_keys, key=lambda k: k[1])
+    result = sorted(same_keys + different_keys + new_keys, key=lambda item: item[1])
 
     output = '{'
     for items in result:
@@ -36,3 +36,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+__all__ = (generate_diff)
