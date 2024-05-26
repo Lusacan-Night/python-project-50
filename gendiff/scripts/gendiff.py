@@ -10,14 +10,18 @@ def generate_diff(filepath1, filepath2):
     f1_set = set(f1.items())
     f2_set = set(f2.items())
 
-    same_keys = [('    ', item[0], str(item[1])) for item in f1_set.intersection(f2_set)]
-    different_keys = [('  - ', item[0], str(item[1])) for item in f1_set.difference(f2_set)]
-    new_keys = [('  + ', item[0], str(item[1])) for item in f2_set.difference(f1_set)]
+    f1_intersection = f1_set.intersection(f2_set)
+    f1_diff = f1_set.difference(f2_set)
+    f2_diff = f2_set.difference(f1_set)
 
-    result = sorted(same_keys + different_keys + new_keys, key=lambda item: item[1])
+    same_keys = [('    ', items[0], str(items[1])) for items in f1_intersection]
+    different_keys = [('  - ', items[0], str(items[1])) for items in f1_diff]
+    new_keys = [('  + ', items[0], str(items[1])) for items in f2_diff]
+
+    result = same_keys + different_keys + new_keys
 
     output = '{'
-    for items in result:
+    for items in sorted(result, key=lambda item: item[1]):
         output += f'\n{items[0] + items[1]}: {items[2].lower()}'
 
     output += '\n}'
@@ -25,7 +29,8 @@ def generate_diff(filepath1, filepath2):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Compares two configuration files and shows a difference.")
+    description = "Compares two configuration files and shows a difference."
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument("first_file")
     parser.add_argument("second_file")
     parser.add_argument("-f", "--format", help="set format of output")
