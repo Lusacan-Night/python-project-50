@@ -4,4 +4,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7f632097335336947ea3/test_coverage)](https://codeclimate.com/github/zazikell/python-project-50/test_coverage)
 
 Project demo:
-[![asciicast](https://asciinema.org/a/659442.png)](https://asciinema.org/a/659442)
+[![asciicast](https://asciinema.org/a/oHgiFQ2yUSPyV2g5kZgYukoyp.svg)](https://asciinema.org/a/oHgiFQ2yUSPyV2g5kZgYukoyp)
