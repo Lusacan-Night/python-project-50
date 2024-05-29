@@ -1,10 +1,11 @@
 import argparse
-import json
+
+from gendiff.parsing import parse_file
 
 
 def generate_diff(filepath1, filepath2):
-    f1 = json.load(open(filepath1))
-    f2 = json.load(open(filepath2))
+    f1 = parse_file(filepath1)
+    f2 = parse_file(filepath2)
 
     result = []
     f1_set = set(f1.items())
