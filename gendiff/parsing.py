@@ -1,7 +1,7 @@
 import json
 import yaml
 
-def parse_file(filepath):
+def parse_data(filepath):
     if filepath.endswith("json"):
         with open(filepath, 'r') as file:
             json_file = json.load(file)

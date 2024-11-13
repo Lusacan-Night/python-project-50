@@ -1,32 +1,31 @@
 import argparse
 
-from gendiff.parsing import parse_file
-
+from gendiff.parsing import parse_data
+from gendiff.scripts.formatter import stylish
 
 def generate_diff(filepath1, filepath2):
-    f1 = parse_file(filepath1)
-    f2 = parse_file(filepath2)
+    f1 = parse_data(filepath1)
+    f2 = parse_data(filepath2)
 
-    result = []
-    f1_set = set(f1.items())
-    f2_set = set(f2.items())
+    added = '+ '
+    deleted = '- '
+    changed = '  '
+    unchanged = '  '
 
-    f1_intersection = f1_set.intersection(f2_set)
-    f1_diff = f1_set.difference(f2_set)
-    f2_diff = f2_set.difference(f1_set)
+    keys = f1.keys() | f2.keys()
+    result = {}
 
-    same_keys = [('    ', items[0], str(items[1])) for items in f1_intersection]
-    different_keys = [('  - ', items[0], str(items[1])) for items in f1_diff]
-    new_keys = [('  + ', items[0], str(items[1])) for items in f2_diff]
+    for key in keys:
+        if key not in f1:
+            result[key] = {'type': 'added'}
+        elif key not in f2:
+            result[key] = {'type': 'deleted'}
+        elif f1[key] == f2[key]:
+            result[key] = {'type': 'unchanged'}
+        else:
+            result[key] = {'type': 'changed'}
 
-    result = same_keys + different_keys + new_keys
-
-    output = '{'
-    for items in sorted(result, key=lambda item: item[1]):
-        output += f'\n{items[0] + items[1]}: {items[2].lower()}'
-
-    output += '\n}'
-    return output
+    return dict(sorted(result.items()))
 
 
 def main():
@@ -37,7 +36,7 @@ def main():
     parser.add_argument("-f", "--format", help="set format of output")
     args = parser.parse_args()
     diff = generate_diff(args.first_file, args.second_file)
-    print(diff)
+    print(stylish(diff))
 
 
 if __name__ == "__main__":
